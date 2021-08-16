@@ -1,7 +1,7 @@
 // Write your "projects" router here!
 const express = require('express');
 const Projects = require("./projects-model");
-const { validateProjectId, validateProject } = require("./projects-middleware");
+const { validateProjectId, validateProject, validateProjectPUT } = require("./projects-middleware");
 const router = express.Router();
 
 
@@ -31,15 +31,16 @@ router.post('/projects', validateProject, (req, res)=>{
     })
 })
 
-router.put("/projects/:id", validateProjectId, validateProject, (req, res, next)=>{
-    Projects.update(req.params.id, req.body)
+router.put("/projects/:id", validateProjectId, /*validateProjectPUT,*/ (req, res, next)=>{
+    /*README says a check for "completed" is not required, but one of the tests asks for one. Then adding a check passes the previously failed test, but then in turn fails 2 more tests. Regardless of if it has a check or not, the endpoint works perfectly in postman. */
+        Projects.update(req.params.id, req.body)
         .then(project =>{
             res.status(200).json(project)
         })
         .catch(error =>{
             next(error)
-        })
-})
+        }) 
+}) 
 
 router.delete('/projects/:id', validateProjectId, (req, res) =>{
     Projects.remove(req.params.id)
