@@ -21,11 +21,8 @@ const Projects = require("./projects-model")
 
   function validateProject(req, res, next) {
       console.log(req.body)
-    if(!req.body.name){
-        res.status(400).json({ message: "missing required name field" })
-    }
-    else if(!req.body.description){
-        res.status(400).json({ message: "missing required description field" })
+    if(!req.body.name || !req.body.description || !req.completed){
+        res.status(400).json({ message: "missing required name or description field" })
     }
     else{
         next()
